@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.izhandroid.newsbox.ts.telugu.MoreTel">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/but_tela"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/andpra"
+        android:textColor="@color/colorPrimaryDark"
+        android:onClick="ta"
+        android:textSize="24sp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryLight"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/but_telb"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/praja"
+        android:textColor="@color/colorPrimaryDark"
+        android:onClick="tb"
+        android:textSize="24sp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"/>
+
+    <View
+        android:layout_width="match_parent"
+
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryLight"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/but_telc"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/surya"
+        android:textColor="@color/colorPrimaryDark"
+        android:onClick="tc"
+        android:textSize="24sp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"/>
+    <View
+        android:layout_width="match_parent"
+
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryLight"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/but_teld"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:onClick="td"
+            android:paddingBottom="22dp"
+            android:paddingTop="22dp"
+            android:text="@string/adaabhyd"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+
+        <View
+        android:layout_width="match_parent"
+
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryLight"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/but_tele"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/telti"
+        android:textColor="@color/colorPrimaryDark"
+        android:onClick="te"
+        android:textSize="24sp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"/>
+    <View
+        android:layout_width="match_parent"
+
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryLight"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/but_telf"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/grtap"
+        android:textColor="@color/colorPrimaryDark"
+        android:onClick="tf"
+        android:textSize="24sp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"/>
+    <View
+        android:layout_width="match_parent"
+
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryLight"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/but_telg"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:text="@string/nmhyd"
+        android:textColor="@color/colorPrimaryDark"
+        android:onClick="tg"
+        android:textSize="24sp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"/>
+
+    <View
+        android:id="@+id/viewa"
+        android:layout_width="match_parent"
+        android:layout_below="@id/but_telg"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryLight"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="8dp"/>
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_Req"
+        android:layout_width="match_parent"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+android:layout_gravity="center"
+        android:onClick="reqtel"
+android:textColor="#fff"
+        android:text="Request A Newspaper" />
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adViewfs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            ads:adSize="LARGE_BANNER"
+            ads:adUnitId="ca-app-pub-6711729529292720/9170569081">
+        </com.google.android.gms.ads.AdView>
+</LinearLayout>
+</ScrollView>

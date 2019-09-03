@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "468635155562",
+    "firebase_url": "https://ts-news.firebaseio.com",
+    "project_id": "ts-news",
+    "storage_bucket": "ts-news.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468635155562:android:b65c409e7c412aa8",
+        "android_client_info": {
+          "package_name": "com.izhandroid.newsbox.ts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468635155562-18acif03pk4r79tn303skpi7ir931hkm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGq9-9MfwAhhojE2MVd3A6pujZJG6tkS8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468635155562-18acif03pk4r79tn303skpi7ir931hkm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

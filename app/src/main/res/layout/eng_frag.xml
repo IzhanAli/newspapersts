@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#424242"
+    android:orientation="vertical">
+
+
+    <ListView
+
+        android:id="@+id/engList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:paddingTop="2dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/moreeng"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:backgroundTint="@color/colorAccent"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_margin_vertical_big_activity"
+        android:text="More Newspapers" />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adViewe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="ca-app-pub-6711729529292720/3862046863">
+    </com.google.android.gms.ads.AdView>
+</LinearLayout>

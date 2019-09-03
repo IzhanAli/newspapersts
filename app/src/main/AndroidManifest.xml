@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.izhandroid.newsbox.ts">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+        <activity android:name=".Main2Activity" />
+        <activity android:name=".english.MoreEng">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.izhandroid.newsbox.ts.MainActivity" />
+        </activity>
+        <activity
+            android:name=".english.IndEP"
+            android:label="Select Edition">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.izhandroid.newsbox.ts.MainActivity" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6711729529292720~6492881965" /> <!-- TELUGU  ca-app-pub-6711729529292720~6492881965 -->
+        <activity
+            android:name=".telugu.Sakshi"
+            android:label="Sakshi"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".telugu.NamasteTel"
+            android:label="Newsbox"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".telugu.AndhraBhumi"
+            android:label="Andhrabhoomi EPaper"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".telugu.Varta"
+            android:label="Latest news"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" /> <!-- ENGLISH -->
+        <activity
+            android:name=".english.TOI"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".english.HansInd"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" /> <!-- URDU -->
+        <activity
+            android:name=".urdu.Siasat"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".urdu.Etemaad"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".urdu.Munsif"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".urdu.Sahara"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".urdu.Rehnuma"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".telugu.MoreTel"
+            android:label="@string/title_activity_more_tel"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.izhandroid.newsbox.ts.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AllNewsPTel"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+    </application>
+
+</manifest>

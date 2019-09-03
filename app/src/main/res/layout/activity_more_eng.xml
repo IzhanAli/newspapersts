@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.izhandroid.newsbox.ts.english.MoreEng">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/butenga"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Financial Express"
+            android:textColor="@color/colorPrimaryDark"
+            android:onClick="fe"
+            android:textSize="24sp"
+            android:paddingTop="22dp"
+            android:paddingBottom="22dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryLight"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"/>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/butengb"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="Arab News"
+            android:textColor="@color/colorPrimaryDark"
+            android:onClick="an"
+            android:textSize="24sp"
+            android:paddingTop="22dp"
+            android:paddingBottom="22dp"/>
+
+        <View
+            android:layout_width="match_parent"
+
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryLight"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/but_telc"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="Telegraph India"
+            android:textColor="@color/colorPrimaryDark"
+            android:onClick="tc"
+            android:textSize="24sp"
+            android:paddingTop="22dp"
+            android:paddingBottom="22dp"/>
+
+        <View
+            android:id="@+id/viewa"
+            android:layout_width="match_parent"
+            android:layout_below="@id/but_telg"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryLight"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="8dp"/>
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_Reqeng"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:onClick="reqeng"
+            android:textColor="#fff"
+            android:text="Request A Newspaper" />
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adViewxx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            ads:adSize="LARGE_BANNER"
+            ads:adUnitId="ca-app-pub-6711729529292720/4980042636">
+        </com.google.android.gms.ads.AdView>
+    </LinearLayout>
+</ScrollView>

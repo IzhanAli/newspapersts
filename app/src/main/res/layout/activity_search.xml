@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.izhandroid.newsbox.ts.AllNewsPTel">
+
+<com.arlib.floatingsearchview.FloatingSearchView
+    android:id="@+id/searchView"
+    android:layout_height="56dp"
+    android:layout_width="match_parent"
+    android:elevation="22dp"
+app:floatingSearch_close_search_on_keyboard_dismiss="true"
+    app:floatingSearch_dimBackground="true"
+    app:floatingSearch_dismissOnOutsideTouch="true"
+    app:floatingSearch_leftActionColor="@color/colorAccent"
+    app:floatingSearch_leftActionMode="showSearch"
+    app:floatingSearch_searchHint="All newsapers..."
+    app:floatingSearch_showSearchKey="true"
+    app:floatingSearch_suggestionsListAnimDuration="300"/>
+    <ListView
+        android:id="@+id/listSearch"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:padding="10dp" />
+
+
+</LinearLayout>

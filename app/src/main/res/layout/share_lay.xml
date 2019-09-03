@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primaryTextColor"
+    >
+<androidx.appcompat.widget.AppCompatImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/ic_close_black_36dp"
+    android:background="@color/primaryTextColor"
+    android:padding="8dp"
+    android:id="@+id/share_dialog_close"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="370dp"
+        android:alpha="50"
+        android:layout_below="@id/share_dialog_close"
+        android:layout_margin="20dp"
+        android:padding="60dp"
+        android:id="@+id/img_share_dialog"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/backgrounds/scenic[1]"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundTint="#0091EA"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_below="@id/img_share_dialog"
+        android:text="Share"
+        android:id="@+id/sharebtn"
+        android:textColor="@color/primaryTextColor"
+        app:iconTint="@color/primaryTextColor"
+        app:icon="@drawable/ic_share_white_36dp"
+        app:iconSize="20dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundTint="#4527A0"
+        android:id="@+id/savbtn"
+        android:layout_marginStart="30dp"
+        android:textColor="@color/primaryTextColor"
+        app:iconTint="@color/primaryTextColor"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="40dp"
+        android:layout_below="@id/sharebtn"
+        android:text="Save to gallery"
+        app:icon="@drawable/ic_insert_photo_white_24dp"
+       />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/savbtn"
+        android:text="This feature is still in BETA testing stage"
+        android:textSize="10sp"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccentLight">#b4fdfe</color>
+    <color name="colorAccentDark">#0097a7</color>
+    <color name="colorAccent">#26c6da</color>
+    <color name="blue_tp">#e1400b85</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryLight">#484848</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorTextDisable">#66FFFFFF</color>
+    <color name="listBack">#ffffff</color>
+    <color name="cardcolone">#191ffffb</color>
+    <color name="cardcoltwo">#0f0064ef</color>
+    <color name="cardcolthree">#1904EF00</color>
+
+
+    <color name="primaryTextColor">#ffffff</color>
+
+    <color name="secondaryTextColor">#000000</color>
+
+    <integer-array name="mycolors">
+        <item>@color/gplus_color_1</item>
+        <item>@color/gplus_color_2</item>
+        <item>@color/gplus_color_3</item>
+        <item>@color/gplus_color_4</item>
+        <item>@color/pocket_color_4</item>
+    </integer-array>
+
+    <color name="gplus_color_1">#d32f2f</color>
+    <color name="gplus_color_2">#43a047</color>
+    <color name="gplus_color_3">#3f51b5</color>
+    <color name="gplus_color_4">#009688</color>
+
+
+    <color name="pocket_color_4">#fcb74d</color>
+</resources>
+<!--<color name="colorAccentLight">#7f5bbf</color>
+<color name="colorAccentDark">#311b92</color>
+<color name="colorAccent">#7e57c2</color>
+<color name="blue_tp">#e1400b85</color>
+<color name="colorPrimary">#ff7043</color>
+<color name="colorPrimaryLight">#ffa270</color>
+<color name="colorPrimaryDark">#c63f17</color>
+ <color name="pocket_color_1">#85edb9</color>
+    <color name="pocket_color_2">#34bdb7</color>
+    <color name="pocket_color_3">#ee4458</color>
+-->
