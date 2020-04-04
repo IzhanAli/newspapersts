@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         AppRate.with(this)
-                .setInstallDays(5) // default 10, 0 means install day.
-                .setLaunchTimes(8) // default 10
-                .setRemindInterval(10) // default 1
+                .setInstallDays(2) // default 10, 0 means install day.
+                .setLaunchTimes(5) // default 10
+                .setRemindInterval(20) // default 1
                 .setShowLaterButton(true) // default true
                 .setDebug(false) // default false
                 .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.rate:
                 Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.izhandroid.newsbox.ts");
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                Toast.makeText(this, "Remember to give a 5-star rating", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.update:
                 Uri uril = Uri.parse("https://play.google.com/store/apps/details?id=com.izhandroid.newsbox.ts");

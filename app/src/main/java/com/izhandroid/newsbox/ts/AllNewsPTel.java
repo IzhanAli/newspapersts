@@ -14,11 +14,15 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.izhandroid.newsbox.ts.english.HansInd;
 import com.izhandroid.newsbox.ts.english.IndEP;
 import com.izhandroid.newsbox.ts.english.TOI;
 import com.izhandroid.newsbox.ts.telugu.AndhraBhumi;
+import com.izhandroid.newsbox.ts.telugu.MoreTel;
 import com.izhandroid.newsbox.ts.telugu.NamasteTel;
 import com.izhandroid.newsbox.ts.telugu.Sakshi;
 import com.izhandroid.newsbox.ts.urdu.Etemaad;
@@ -79,6 +83,7 @@ List<String> liste;
     String ub = "https://www.etemaaddaily.com";
     String uc = "https://www.munsifdaily.in";
     ArrayAdapter<String> adapteri;
+    InterstitialAd mInterstitialAd;
 FloatingSearchView fs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,10 @@ FloatingSearchView fs;
         paramc.putString("msg", "All loaded");
         paramc.putString("title", "Search was called");
         firebaseAnalytics.logEvent("Searched", paramc);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-6711729529292720/3126059005");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         listView = (ListView) findViewById(R.id.listSearch);
 
@@ -121,322 +130,390 @@ prepareData();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (adapter.getItem(position).toString()){
-                    case "sakshi":
 
-                        Intent sakshi = new Intent(AllNewsPTel.this, Sakshi.class);
-                        startActivity(sakshi);
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else if (mInterstitialAd.isLoading()) {
+                    Toast.makeText(AllNewsPTel.this, "Try after 4-5 secs..", Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(AllNewsPTel.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
-                        break;
-                    case "eenadu":
-                        openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.eenadu.net"));
-                    break;
-                    case "namasthe telangana":
-                        Intent namste = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        namste.putExtra("ntnews", nt);
+                } else {
+                    switch (adapter.getItem(position).toString()) {
+                        case "sakshi":
 
-                        startActivity(namste);
-                        Toast.makeText(AllNewsPTel.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
-                        break;
-                    case "andhrajyoti":
-                        Intent anjy = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        anjy.putExtra("ajyothi", aj);
-                        startActivity(anjy);
-                        break;
-                    case "andhrabhoomi":
-                        LayoutInflater inflater1 = LayoutInflater.from(AllNewsPTel.this);
-                        final View view1 = inflater1.inflate(R.layout.custom_ab, null);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(AllNewsPTel.this);
-                        builder.setView(view1);
-                        //btn
-                        Button btte = view1.findViewById(R.id.bute);
-                        Button btap = view1.findViewById(R.id.buap);
-                        final AlertDialog alertDialog = builder.create();
+                            Intent sakshi = new Intent(AllNewsPTel.this, Sakshi.class);
+                            startActivity(sakshi);
 
-                        alertDialog.show();
-                        btte.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent chah = new Intent(AllNewsPTel.this, AndhraBhumi.class);
-                                chah.putExtra("abts", anbhst);
-                                startActivity(chah);
-                            }
-                        });
-                        btap.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent cah = new Intent(AllNewsPTel.this, AndhraBhumi.class);
-                                cah.putExtra("abap", anbhsa);
-                                startActivity(cah);
-                            }
-                        });
-                        break;
-                    case "vartha":
-                        Intent vart = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        vart.putExtra("vartha", vt);
-                        startActivity(vart);
-                        break;
-                    case "mana telangana":
-                        Intent mana = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        mana.putExtra("manatel", mt);
-                        startActivity(mana);
-                        break;
-                    case "nava telangana":
-                        Intent nava = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        nava.putExtra("navatel", navt);
-                        startActivity(nava);
-                        break;
-                    case "prabha news":
-                        Intent a = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        a.putExtra("keya",ta);
-                        startActivity(a);
-                        break;
-                    case "praja shakti":
-                        Intent b = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        b.putExtra("keyb",tb);
-                        startActivity(b);
-                        break;
-                    case "surya":
-                        Intent c = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        c.putExtra("keyc",tc);
-                        startActivity(c);
-                        break;
-                    case "aadab hyderabad":
-                        Intent d = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        d.putExtra("keyd",td);
-                        startActivity(d);
-                        break;
-                    case "telugu times":
-                        Intent e = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        e.putExtra("keye",te);
-                        startActivity(e);
-                        break;
-                    case "great andhra":
-                        Intent f = new Intent(AllNewsPTel.this, NamasteTel.class);
-                        f.putExtra("keyf",tf);
-                        startActivity(f);
-                        break;
+                            Toast.makeText(AllNewsPTel.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+                            break;
+                        case "eenadu":
+                            openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.eenadu.net"));
+                            break;
+                        case "namasthe telangana":
+                            Intent namste = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            namste.putExtra("ntnews", nt);
+
+                            startActivity(namste);
+                            Toast.makeText(AllNewsPTel.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+                            break;
+                        case "andhrajyoti":
+                            Intent anjy = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            anjy.putExtra("ajyothi", aj);
+                            startActivity(anjy);
+                            break;
+                        case "andhrabhoomi":
+                            LayoutInflater inflater1 = LayoutInflater.from(AllNewsPTel.this);
+                            final View view1 = inflater1.inflate(R.layout.custom_ab, null);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(AllNewsPTel.this);
+                            builder.setView(view1);
+                            //btn
+                            Button btte = view1.findViewById(R.id.bute);
+                            Button btap = view1.findViewById(R.id.buap);
+                            final AlertDialog alertDialog = builder.create();
+
+                            alertDialog.show();
+                            btte.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent chah = new Intent(AllNewsPTel.this, AndhraBhumi.class);
+                                    chah.putExtra("abts", anbhst);
+                                    startActivity(chah);
+                                }
+                            });
+                            btap.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent cah = new Intent(AllNewsPTel.this, AndhraBhumi.class);
+                                    cah.putExtra("abap", anbhsa);
+                                    startActivity(cah);
+                                }
+                            });
+                            break;
+                        case "vartha":
+                            Intent vart = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            vart.putExtra("vartha", vt);
+                            startActivity(vart);
+                            break;
+                        case "mana telangana":
+                            Intent mana = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            mana.putExtra("manatel", mt);
+                            startActivity(mana);
+                            break;
+                        case "nava telangana":
+                            Intent nava = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            nava.putExtra("navatel", navt);
+                            startActivity(nava);
+                            break;
+                        case "prabha news":
+                            Intent a = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            a.putExtra("keya", ta);
+                            startActivity(a);
+                            break;
+                        case "praja shakti":
+                            Intent b = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            b.putExtra("keyb", tb);
+                            startActivity(b);
+                            break;
+                        case "surya":
+                            Intent c = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            c.putExtra("keyc", tc);
+                            startActivity(c);
+                            break;
+                        case "aadab hyderabad":
+                            Intent d = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            d.putExtra("keyd", td);
+                            startActivity(d);
+                            break;
+                        case "telugu times":
+                            Intent e = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            e.putExtra("keye", te);
+                            startActivity(e);
+                            break;
+                        case "great andhra":
+                            Intent f = new Intent(AllNewsPTel.this, NamasteTel.class);
+                            f.putExtra("keyf", tf);
+                            startActivity(f);
+                            break;
                         case "namasthe hyderabad":
                             Intent g = new Intent(AllNewsPTel.this, NamasteTel.class);
                             g.putExtra("keyg",tg);
                             startActivity(g);
-                        break;
-                    case "deccan chronicle":
-                        Intent sashi = new Intent(AllNewsPTel.this, AndhraBhumi.class);
-                        sashi.putExtra("dc", deccanch);
-                        startActivity(sashi);
-                        break;
-                    case "the hans":
-                        Intent haa = new Intent(AllNewsPTel.this, HansInd.class);
-                        haa.putExtra("hans", thi);
-                        startActivity(haa);
-                        break;
-                    case "telangana today":
-                        Intent teee = new Intent(AllNewsPTel.this, HansInd.class);
-                        teee.putExtra("teltod", teltd);
-                        startActivity(teee);
-                        break;
-                    case "indian express":
-                        Intent dd = new Intent(AllNewsPTel.this, IndEP.class);
-                        startActivity(dd);
+                            break;
+                        case "deccan chronicle":
+                            Intent sashi = new Intent(AllNewsPTel.this, AndhraBhumi.class);
+                            sashi.putExtra("dc", deccanch);
+                            startActivity(sashi);
+                            break;
+                        case "the hans":
+                            Intent haa = new Intent(AllNewsPTel.this, HansInd.class);
+                            haa.putExtra("hans", thi);
+                            startActivity(haa);
+                            break;
+                        case "telangana today":
+                            Intent teee = new Intent(AllNewsPTel.this, HansInd.class);
+                            teee.putExtra("teltod", teltd);
+                            startActivity(teee);
+                            break;
+                        case "indian express":
+                            Intent dd = new Intent(AllNewsPTel.this, IndEP.class);
+                            startActivity(dd);
 
-                        break;
-                    case "deccan herald":
-                        Intent deccc = new Intent(AllNewsPTel.this, HansInd.class);
-                        deccc.putExtra("decher", dchr);
-                        startActivity(deccc);
-                        break;
-                    case "times of india":
-                        openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.timesgroup.com"));
+                            break;
+                        case "deccan herald":
+                            Intent deccc = new Intent(AllNewsPTel.this, HansInd.class);
+                            deccc.putExtra("decher", dchr);
+                            startActivity(deccc);
+                            break;
+                        case "times of india":
+                            openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.timesgroup.com"));
 
-                        break;
-                    case "arab news":
-                        Intent da = new Intent(AllNewsPTel.this, TOI.class);
-                        da.putExtra("nga",ane);
-                        startActivity(da);
-                        break;
-                    case "financial express":
-                        Intent db = new Intent(AllNewsPTel.this, TOI.class);
-                        db.putExtra("ngb",fex);
-                        startActivity(db);
-                        break;
-                    case "telegraph india":
-                        Intent dc = new Intent(AllNewsPTel.this, TOI.class);
-                        dc.putExtra("ngc",tie);
-                        startActivity(dc);
-                        break;
+                            break;
+                        case "arab news":
+                            Intent da = new Intent(AllNewsPTel.this, TOI.class);
+                            da.putExtra("nga", ane);
+                            startActivity(da);
+                            break;
+                        case "financial express":
+                            Intent db = new Intent(AllNewsPTel.this, TOI.class);
+                            db.putExtra("ngb", fex);
+                            startActivity(db);
+                            break;
+                        case "telegraph india":
+                            Intent dc = new Intent(AllNewsPTel.this, TOI.class);
+                            dc.putExtra("ngc", tie);
+                            startActivity(dc);
+                            break;
 
-                    case "siasat":
-                        //Intent sakshi = new Intent(getActivity(), Sakshi.class);
-                        //startActivity(sakshi);
-                        Intent sia = new Intent(AllNewsPTel.this, Siasat.class);
-                        startActivity(sia);
-                        break;
+                        case "siasat":
+                            //Intent sakshi = new Intent(getActivity(), Sakshi.class);
+                            //startActivity(sakshi);
+                            Intent sia = new Intent(AllNewsPTel.this, Siasat.class);
+                            startActivity(sia);
+                            break;
 
 
-                    case "etemaad":
-                        Intent de = new Intent(AllNewsPTel.this, Etemaad.class);
-                        startActivity(de);                        break;
-                    case "munsif":
-                        Intent m = new Intent(AllNewsPTel.this, Munsif.class);
-                        startActivity(m);
-                        break;
-                    case "sahara":
-                        Intent s = new Intent(AllNewsPTel.this, Sahara.class);
-                        s.putExtra("sah", saha);
-                        startActivity(s);                        break;
-                    case "rehnuma":
-                        Intent r = new Intent(AllNewsPTel.this, Sahara.class);
-                        r.putExtra("rah", reh);
-                        startActivity(r);                           break;
-                    case "sadae hussaini":
-                        Intent dv = new Intent(AllNewsPTel.this, Sahara.class);
-                        dv.putExtra("sh", sad);
-                        startActivity(dv);                         break;
+                        case "etemaad":
+                            Intent de = new Intent(AllNewsPTel.this, Etemaad.class);
+                            startActivity(de);
+                            break;
+                        case "munsif":
+                            Intent m = new Intent(AllNewsPTel.this, Munsif.class);
+                            startActivity(m);
+                            break;
+                        case "sahara":
+                            Intent s = new Intent(AllNewsPTel.this, Sahara.class);
+                            s.putExtra("sah", saha);
+                            startActivity(s);
+                            break;
+                        case "rehnuma":
+                            Intent r = new Intent(AllNewsPTel.this, Sahara.class);
+                            r.putExtra("rah", reh);
+                            startActivity(r);
+                            break;
+                        case "sadae hussaini":
+                            Intent dv = new Intent(AllNewsPTel.this, Sahara.class);
+                            dv.putExtra("sh", sad);
+                            startActivity(dv);
+                            break;
                         default:
                             Toast.makeText(AllNewsPTel.this, "An error occurred", Toast.LENGTH_SHORT).show();
 
+                    }
                 }
+                mInterstitialAd.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClosed() {
+                        super.onAdClosed();
 
-                /*if(id==0){
-                    Intent sakshi = new Intent(AllNewsPTel.this, Sakshi.class);
-                    startActivity(sakshi);
+                        switch (adapter.getItem(position).toString()) {
+                            case "sakshi":
 
-                }else if(id==1){
-                    openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.eenadu.net"));
-                }else if(id==2){
-                    Intent namste = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    namste.putExtra("ntnews", nt);
+                                Intent sakshi = new Intent(AllNewsPTel.this, Sakshi.class);
+                                startActivity(sakshi);
 
-                    startActivity(namste);
-                }else if(id==3){
-                    Intent anjy = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    anjy.putExtra("ajyothi", aj);
-                    startActivity(anjy);
-                }else if(id==4){
-                    LayoutInflater inflater1 = LayoutInflater.from(AllNewsPTel.this);
-                    final View view1 = inflater1.inflate(R.layout.custom_ab, null);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AllNewsPTel.this);
-                    builder.setView(view1);
-                    //btn
-                    Button btte = view1.findViewById(R.id.bute);
-                    Button btap = view1.findViewById(R.id.buap);
-                    final AlertDialog alertDialog = builder.create();
+                                Toast.makeText(AllNewsPTel.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+                                break;
+                            case "eenadu":
+                                openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.eenadu.net"));
+                                break;
+                            case "namasthe telangana":
+                                Intent namste = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                namste.putExtra("ntnews", nt);
 
-                    alertDialog.show();
-                    btte.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent chah = new Intent(AllNewsPTel.this, AndhraBhumi.class);
-                            chah.putExtra("abts", anbhst);
-                            startActivity(chah);
+                                startActivity(namste);
+                                Toast.makeText(AllNewsPTel.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+                                break;
+                            case "andhrajyoti":
+                                Intent anjy = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                anjy.putExtra("ajyothi", aj);
+                                startActivity(anjy);
+                                break;
+                            case "andhrabhoomi":
+                                LayoutInflater inflater1 = LayoutInflater.from(AllNewsPTel.this);
+                                final View view1 = inflater1.inflate(R.layout.custom_ab, null);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(AllNewsPTel.this);
+                                builder.setView(view1);
+                                //btn
+                                Button btte = view1.findViewById(R.id.bute);
+                                Button btap = view1.findViewById(R.id.buap);
+                                final AlertDialog alertDialog = builder.create();
+
+                                alertDialog.show();
+                                btte.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent chah = new Intent(AllNewsPTel.this, AndhraBhumi.class);
+                                        chah.putExtra("abts", anbhst);
+                                        startActivity(chah);
+                                    }
+                                });
+                                btap.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent cah = new Intent(AllNewsPTel.this, AndhraBhumi.class);
+                                        cah.putExtra("abap", anbhsa);
+                                        startActivity(cah);
+                                    }
+                                });
+                                break;
+                            case "vartha":
+                                Intent vart = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                vart.putExtra("vartha", vt);
+                                startActivity(vart);
+                                break;
+                            case "mana telangana":
+                                Intent mana = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                mana.putExtra("manatel", mt);
+                                startActivity(mana);
+                                break;
+                            case "nava telangana":
+                                Intent nava = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                nava.putExtra("navatel", navt);
+                                startActivity(nava);
+                                break;
+                            case "prabha news":
+                                Intent a = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                a.putExtra("keya", ta);
+                                startActivity(a);
+                                break;
+                            case "praja shakti":
+                                Intent b = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                b.putExtra("keyb", tb);
+                                startActivity(b);
+                                break;
+                            case "surya":
+                                Intent c = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                c.putExtra("keyc", tc);
+                                startActivity(c);
+                                break;
+                            case "aadab hyderabad":
+                                Intent d = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                d.putExtra("keyd", td);
+                                startActivity(d);
+                                break;
+                            case "telugu times":
+                                Intent e = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                e.putExtra("keye", te);
+                                startActivity(e);
+                                break;
+                            case "great andhra":
+                                Intent f = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                f.putExtra("keyf", tf);
+                                startActivity(f);
+                                break;
+                            case "namasthe hyderabad":
+                                Intent g = new Intent(AllNewsPTel.this, NamasteTel.class);
+                                g.putExtra("keyg", tg);
+                                startActivity(g);
+                                break;
+                            case "deccan chronicle":
+                                Intent sashi = new Intent(AllNewsPTel.this, AndhraBhumi.class);
+                                sashi.putExtra("dc", deccanch);
+                                startActivity(sashi);
+                                break;
+                            case "the hans":
+                                Intent haa = new Intent(AllNewsPTel.this, HansInd.class);
+                                haa.putExtra("hans", thi);
+                                startActivity(haa);
+                                break;
+                            case "telangana today":
+                                Intent teee = new Intent(AllNewsPTel.this, HansInd.class);
+                                teee.putExtra("teltod", teltd);
+                                startActivity(teee);
+                                break;
+                            case "indian express":
+                                Intent dd = new Intent(AllNewsPTel.this, IndEP.class);
+                                startActivity(dd);
+
+                                break;
+                            case "deccan herald":
+                                Intent deccc = new Intent(AllNewsPTel.this, HansInd.class);
+                                deccc.putExtra("decher", dchr);
+                                startActivity(deccc);
+                                break;
+                            case "times of india":
+                                openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.timesgroup.com"));
+
+                                break;
+                            case "arab news":
+                                Intent da = new Intent(AllNewsPTel.this, TOI.class);
+                                da.putExtra("nga", ane);
+                                startActivity(da);
+                                break;
+                            case "financial express":
+                                Intent db = new Intent(AllNewsPTel.this, TOI.class);
+                                db.putExtra("ngb", fex);
+                                startActivity(db);
+                                break;
+                            case "telegraph india":
+                                Intent dc = new Intent(AllNewsPTel.this, TOI.class);
+                                dc.putExtra("ngc", tie);
+                                startActivity(dc);
+                                break;
+
+                            case "siasat":
+                                //Intent sakshi = new Intent(getActivity(), Sakshi.class);
+                                //startActivity(sakshi);
+                                Intent sia = new Intent(AllNewsPTel.this, Siasat.class);
+                                startActivity(sia);
+                                break;
+
+
+                            case "etemaad":
+                                Intent de = new Intent(AllNewsPTel.this, Etemaad.class);
+                                startActivity(de);
+                                break;
+                            case "munsif":
+                                Intent m = new Intent(AllNewsPTel.this, Munsif.class);
+                                startActivity(m);
+                                break;
+                            case "sahara":
+                                Intent s = new Intent(AllNewsPTel.this, Sahara.class);
+                                s.putExtra("sah", saha);
+                                startActivity(s);
+                                break;
+                            case "rehnuma":
+                                Intent r = new Intent(AllNewsPTel.this, Sahara.class);
+                                r.putExtra("rah", reh);
+                                startActivity(r);
+                                break;
+                            case "sadae hussaini":
+                                Intent dv = new Intent(AllNewsPTel.this, Sahara.class);
+                                dv.putExtra("sh", sad);
+                                startActivity(dv);
+                                break;
+                            default:
+                                Toast.makeText(AllNewsPTel.this, "An error occurred", Toast.LENGTH_SHORT).show();
+
                         }
-                    });
-                    btap.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent cah = new Intent(AllNewsPTel.this, AndhraBhumi.class);
-                            cah.putExtra("abap", anbhsa);
-                            startActivity(cah);
-                        }
-                    });
-                }else if(id==5){
-                    Intent vart = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    vart.putExtra("vartha", vt);
-                    startActivity(vart);
-                }else if(id==6){
-                    Intent mana = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    mana.putExtra("manatel", mt);
-                    startActivity(mana);
-                }else if(id==7){
-                    Intent nava = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    nava.putExtra("navatel", navt);
-                    startActivity(nava);
-                }else if(id==8){
-                    Intent a = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    a.putExtra("keya",ta);
-                    startActivity(a);
-                }else if(id==9){
-                    Intent b = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    b.putExtra("keyb",tb);
-                    startActivity(b);
-                }else if(id==10){
-                    Intent c = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    c.putExtra("keyc",tc);
-                    startActivity(c);
-                }else if(id==11){
-                    Intent d = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    d.putExtra("keyd",td);
-                    startActivity(d);
-                }else if(id==12){
-                    Intent e = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    e.putExtra("keye",te);
-                    startActivity(e);
-                }else if(id==13){
-                    Intent e = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    e.putExtra("keye",te);
-                    startActivity(e);
-                }else if(id==14){
-                    Intent g = new Intent(AllNewsPTel.this, NamasteTel.class);
-                    g.putExtra("keyg",tg);
-                    startActivity(g);
-                }else if(id==15){
-                    Intent sashi = new Intent(AllNewsPTel.this, AndhraBhumi.class);
-                    sashi.putExtra("dc", deccanch);
-                    startActivity(sashi);
-                }else if(id==16){
-                    Intent haa = new Intent(AllNewsPTel.this, HansInd.class);
-                    haa.putExtra("hans", thi);
-                    startActivity(haa);
-                }else if(id==17){
-                    Intent teee = new Intent(AllNewsPTel.this, HansInd.class);
-                    teee.putExtra("teltod", teltd);
-                    startActivity(teee);
-                }else if(id==18){
-                    Intent dd = new Intent(AllNewsPTel.this, IndEP.class);
-                    startActivity(dd);
 
-                }else if(id==19){
-                    Intent deccc = new Intent(AllNewsPTel.this, HansInd.class);
-                    deccc.putExtra("decher", dchr);
-                    startActivity(deccc);
-                }else if(id==20){
-                    openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.timesgroup.com"));
+                    }
 
-                }else if(id==21){
-                    Intent sia = new Intent(AllNewsPTel.this, Siasat.class);
-                    startActivity(sia);
-                }else if(id==22){
-                    Intent db = new Intent(AllNewsPTel.this, TOI.class);
-                    db.putExtra("ngb",fex);
-                    startActivity(db);
-                }else if(id==23){
-                    Intent dc = new Intent(AllNewsPTel.this, TOI.class);
-                    dc.putExtra("ngc",tie);
-                    startActivity(dc);
-                }else if(id==24){
-                    Intent sia = new Intent(AllNewsPTel.this, Siasat.class);
-                    startActivity(sia);
-                }else if(id==25){
-                    Intent de = new Intent(AllNewsPTel.this, Etemaad.class);
-                    startActivity(de);
-                }else if(id==26){
-                    Intent m = new Intent(AllNewsPTel.this, Munsif.class);
-                    startActivity(m);
-                }else if(id==27){
-                    Intent s = new Intent(AllNewsPTel.this, Sahara.class);
-                    s.putExtra("sah", saha);
-                    startActivity(s);
-                }else if(id==28){
-                    Intent r = new Intent(AllNewsPTel.this, Sahara.class);
-                    r.putExtra("rah", reh);
-                    startActivity(r);
-                }else if(id==29){
-                    Intent dv = new Intent(AllNewsPTel.this, Sahara.class);
-                    dv.putExtra("sh", sad);
-                    startActivity(dv);
-                }*/
+
+                });
+
+
+
+
             }
         });
 

@@ -97,7 +97,7 @@ public class FragEng extends Fragment {
         final View rootView = inflater.inflate(R.layout.eng_frag, container, false);
         MobileAds.initialize(getActivity(),
 
-                "ca-app-pub-6711729529292720~6492881965");
+                getResources().getString(R.string.pubid));
 
         AdView mAdView = rootView.findViewById(R.id.adViewe);
         AdRequest adRequest = new AdRequest.Builder().build();

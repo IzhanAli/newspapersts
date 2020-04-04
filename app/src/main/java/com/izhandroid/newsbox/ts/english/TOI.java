@@ -18,9 +18,12 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import android.os.Handler;
 import android.view.Gravity;
@@ -54,8 +57,7 @@ public class TOI extends AppCompatActivity {
 
 
     private WebView wv;
-private InterstitialAd mInterstitialAd;
-    private ProgressBar progressBarD;
+    ProgressBar progressBarD;
     private String urla;
     private FloatingActionButton floatingActionButton;
     private AppBarLayout appBarLayout;
@@ -63,6 +65,7 @@ private InterstitialAd mInterstitialAd;
     private MaterialCardView cardView;
     FirebaseAnalytics firebaseAnalytics;
     private LinearLayout rootContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +81,9 @@ private InterstitialAd mInterstitialAd;
             Toast.makeText(getApplicationContext(), "Welcomr", Toast.LENGTH_SHORT);
 
         }
-        firebaseAnalytics  = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        rootContent =  findViewById(R.id.weblayouttwo);
+        rootContent = findViewById(R.id.weblayouttwo);
         appBarLayout = findViewById(R.id.appbar);
         relativeLayout = findViewById(R.id.wtrmrkwebtwo);
         cardView = findViewById(R.id.web_two_txtbelow);
@@ -91,24 +94,12 @@ private InterstitialAd mInterstitialAd;
                 ShareUtils.chkntake(TOI.this, appBarLayout, rootContent, relativeLayout, cardView, floatingActionButton, "newsarticle-eng", firebaseAnalytics);
             }
         });
-
-        MobileAds.initialize(this,
-                "ca-app-pub-6711729529292720~6492881965");
-//TODO adid
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-6711729529292720/6741870381");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Your code to show add
-                mInterstitialAd.show();
-            }
-        }, 45000);
+        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        progressBarD =  findViewById(R.id.progr);
+        progressBarD = findViewById(R.id.progr);
 
+        progressBarD.setMax(100);
 
         LoadWeb();
 
@@ -142,6 +133,7 @@ private InterstitialAd mInterstitialAd;
         wv.onResume();
         super.onResume();
     }
+
     public AlertDialog.Builder buildDialog(Context c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
@@ -209,19 +201,32 @@ private InterstitialAd mInterstitialAd;
         if (Build.VERSION.SDK_INT <= 18) {
             wv.getSettings().setBuiltInZoomControls(true);
             wv.getSettings().setDisplayZoomControls(true);
-        }  {
+        }
+        {
             wv.getSettings().setBuiltInZoomControls(false);
             wv.getSettings().setDisplayZoomControls(false);
         }
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
 
-
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON);
+        }
         settings.setDomStorageEnabled(true);
         //settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         // settings.setUseWideViewPort(true);
 
-        wv.setWebViewClient(new WebViewClient());
+        wv.setWebChromeClient(new WebChromeClient() {
+
+            public void onProgressChanged(WebView view, int newProgress) {
+                // Update the progress bar with page loading progress
+                progressBarD.setProgress(newProgress);
+                if (newProgress == 100) {
+                    // Hide the progressbar
+                    progressBarD.setVisibility(View.GONE);
+                }
+            }
+        });
 
         //refreshLayout(this);
         wv.setWebViewClient(new WebViewClient() {
@@ -263,9 +268,9 @@ private InterstitialAd mInterstitialAd;
                 if (settings.getBoolean("my_first_time", true)) {
                     //the app is being launched for first time, do something
 
-                    if(url.contains("arab")||url.contains("telegraphindia")){
-                        Toast t = Toast.makeText(TOI.this,"Swipe to turn pages", Toast.LENGTH_LONG);
-                        t.setGravity(Gravity.CENTER,0,0);
+                    if (url.contains("arab") || url.contains("telegraphindia")) {
+                        Toast t = Toast.makeText(TOI.this, "Swipe to turn pages", Toast.LENGTH_LONG);
+                        t.setGravity(Gravity.CENTER, 0, 0);
                         t.show();
                     }
 
@@ -313,9 +318,9 @@ private InterstitialAd mInterstitialAd;
             }
         });
 
-        Intent intent =this.getIntent();
+        Intent intent = this.getIntent();
 
-        if(intent!= null) {
+        if (intent != null) {
 
             Bundle data = getIntent().getExtras();
 
@@ -323,9 +328,9 @@ private InterstitialAd mInterstitialAd;
                 urla = data.getString("nga");
                 wv.loadUrl(urla);
                 Bundle params = new Bundle();
-                params.putString("msg", "Arab News loaded from TOI");
+                params.putString("msg", "Hindu loaded from TOI");
                 params.putString("title", "nga was called");
-                firebaseAnalytics.logEvent("ArabEn", params);
+                firebaseAnalytics.logEvent("Hindu", params);
             }
             if (data != null && data.containsKey("ngb")) {
                 urla = data.getString("ngb");
@@ -342,6 +347,14 @@ private InterstitialAd mInterstitialAd;
                 params.putString("msg", "Telgrapgh In loaded from HansAct");
                 params.putString("title", "ngc was called");
                 firebaseAnalytics.logEvent("TeleIndEn", params);
+            }
+            if (data != null && data.containsKey("ngd")) {
+                urla = data.getString("ngd");
+                wv.loadUrl(urla);
+                Bundle params = new Bundle();
+                params.putString("msg", "Arab News loaded from TOI");
+                params.putString("title", "nga was called");
+                firebaseAnalytics.logEvent("ArabEn", params);
             }
         }
         //if (urla=)
@@ -375,7 +388,7 @@ private InterstitialAd mInterstitialAd;
 
 
                     this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);*/
-                if(item.isChecked()){
+                if (item.isChecked()) {
                     item.setChecked(false);
                     this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -386,6 +399,28 @@ private InterstitialAd mInterstitialAd;
                     item.setChecked(true);
                 }
                 return true;
+            case R.id.darkmode:
+
+                if (item.isChecked()) {
+
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        item.setChecked(false);
+                        WebSettingsCompat.setForceDark(wv.getSettings(), WebSettingsCompat.FORCE_DARK_OFF);
+                    } else {
+                        item.setChecked(false);
+                        item.setEnabled(false);
+                        Toast.makeText(this, "Dark Pages are not supported to your device", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        WebSettingsCompat.setForceDark(wv.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
+                        item.setChecked(true);
+                    } else {
+                        item.setChecked(false);
+                        item.setEnabled(false);
+                        Toast.makeText(this, "Dark Pages are not supported to your device", Toast.LENGTH_SHORT).show();
+                    }
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }

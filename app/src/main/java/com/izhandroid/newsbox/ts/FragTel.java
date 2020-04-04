@@ -19,9 +19,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.izhandroid.newsbox.ts.telugu.AndhraBhumi;
@@ -45,7 +47,9 @@ import androidx.fragment.app.FragmentActivity;
 public class FragTel extends Fragment {
 
     FirebaseAnalytics firebaseAnalytics;
+    InterstitialAd mInterstitialAds;
     Resources res;
+    boolean clickedonce = false;
 
     String[] titles = {"SAKSHI", "EENADU", "NAMASTE TG", "ANDHRAJYOTI", "ANDHRABHOOMI", "VARTHA", "MANA TG", "NAVA TG",};
 
@@ -91,11 +95,14 @@ public class FragTel extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mInterstitialAds = new InterstitialAd(getContext());
+        mInterstitialAds.setAdUnitId(getResources().getString(R.string.testint));
 
         setHasOptionsMenu(true);
 
 
     }
+
 
     @Nullable
     @Override
@@ -108,9 +115,10 @@ public class FragTel extends Fragment {
         firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
         MobileAds.initialize(getActivity(),
 
-                        "ca-app-pub-6711729529292720~6492881965");
+                getResources().getString(R.string.pubid));
 
-       AdView mAdView = rootView.findViewById(R.id.adView);
+
+        AdView mAdView = rootView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         MyAdapter adapter = new MyAdapter(getActivity(), titles, descriptions, Pics);
@@ -124,6 +132,7 @@ public class FragTel extends Fragment {
 
                 switch (position) {
                     case 0:
+
                         Intent sakshi = new Intent(getActivity(), Sakshi.class);
                         startActivity(sakshi);
                         break;
@@ -192,6 +201,7 @@ public class FragTel extends Fragment {
                         startActivity(nava);
 
                         break;
+
                     /**case 8:
                      NN
                      break;
@@ -222,29 +232,23 @@ public class FragTel extends Fragment {
         // lv.addFooterView(btnAddMore);
 
 
-        /**Button button = (Button) rootView.findViewById(R.id.btn1);
-         button.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-        Intent sakshi = new Intent(getActivity(), Sakshi.class);
-        startActivity(sakshi);
-        }
-        });
-
-         Button button1 = (Button) rootView.findViewById(R.id.btn2);
-         button1.setOnClickListener(new View.OnClickListener(){
-        @Override public void onClick(View v) {
-        Intent eenadu = new Intent(getActivity(), Eenadu.class);
-        startActivity(eenadu);
-        }
-        });  **/
-
-
 
         return rootView;
 
 
     }
 
+    @Override
+    public void onResume() {
+
+        if (clickedonce) {
+            mInterstitialAds.loadAd(new AdRequest.Builder().build());
+        } else {
+            clickedonce = true;
+        }
+
+        super.onResume();
+    }
     private void openCustomTab(Activity activity,
                                Uri uri) {
         // Here is a method that returns the chrome package name
@@ -303,10 +307,10 @@ public class FragTel extends Fragment {
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View row = inflater.inflate(R.layout.list_model, parent, false);
-            ImageView myimg =  row.findViewById(R.id.idPic);
+            ImageView myimg = row.findViewById(R.id.idPic);
             TextView mytitle = (TextView) row.findViewById(R.id.idTitle);
             TextView mydesc = (TextView) row.findViewById(R.id.idDesc);
-            TextView mybut =  row.findViewById(R.id.textView4);
+            TextView mybut = row.findViewById(R.id.textView4);
             myimg.setImageResource(imageArray[position]);
             myimg.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -322,7 +326,7 @@ public class FragTel extends Fragment {
                             params.putString("msg", "EENADU hyd loaded from Fragtel");
                             params.putString("title", "eenadu was called");
                             firebaseAnalytics.logEvent("EENADU", params);
-                         openCustomTab(getActivity(), Uri.parse("https://epaper.eenadu.net"));
+                            openCustomTab(getActivity(), Uri.parse("https://epaper.eenadu.net"));
 
                             break;
                         case 2:
@@ -423,7 +427,7 @@ public class FragTel extends Fragment {
                             params.putString("msg", "EENADU hyd loaded from Fragtel");
                             params.putString("title", "eenadu was called");
                             firebaseAnalytics.logEvent("EENADUTe", params);
-                             openCustomTab(getActivity(), Uri.parse("https://epaper.eenadu.net/"));
+                            openCustomTab(getActivity(), Uri.parse("https://epaper.eenadu.net/"));
 
                             break;
                         case 2:

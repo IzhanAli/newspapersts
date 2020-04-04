@@ -17,7 +17,7 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="370dp"
+        android:layout_height="200dp"
         android:alpha="50"
         android:layout_below="@id/share_dialog_close"
         android:layout_margin="20dp"
@@ -54,13 +54,5 @@
         app:icon="@drawable/ic_insert_photo_white_24dp"
        />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/savbtn"
-        android:text="This feature is still in BETA testing stage"
-        android:textSize="10sp"
-        android:layout_centerHorizontal="true"
-        />
 
 </RelativeLayout>

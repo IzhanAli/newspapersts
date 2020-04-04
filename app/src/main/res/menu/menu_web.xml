@@ -24,6 +24,12 @@
         android:title="Keep Screen On"
         android:checkable="true"
         />
+    <item
+        android:id="@+id/darkmode"
+        android:checkable="true"
+        android:checked="true"
+        android:orderInCategory="13"
+        android:title="Dark Pages" />
 
     </menu>
 

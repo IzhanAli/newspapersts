@@ -46,12 +46,12 @@ import static com.izhandroid.newsbox.ts.R.id.webviewtwo;
  * Created by Izhan Ali on 8/16/2018.
  */
 
-public class Rehnuma  extends AppCompatActivity {
+public class Rehnuma extends AppCompatActivity {
     String urla;
     public WebView wv;
 
     private ProgressBar progressBarb;
-Boolean finishs = true;
+    Boolean finishs = true;
     private FloatingActionButton floatingActionButton;
     private AppBarLayout appBarLayout;
     private RelativeLayout relativeLayout;
@@ -59,7 +59,7 @@ Boolean finishs = true;
     FirebaseAnalytics firebaseAnalytics;
     private LinearLayout rootContent;
     Snackbar snack;
-InterstitialAd mInterstitialAd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,16 +69,16 @@ InterstitialAd mInterstitialAd;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if(!isConnected(Rehnuma.this))
+        if (!isConnected(Rehnuma.this))
             buildDialog(Rehnuma.this).show();
         else {
             Toast.makeText(getApplicationContext(), "Welcomr", Toast.LENGTH_SHORT);
 
         }
 
-        firebaseAnalytics  = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        rootContent =  findViewById(R.id.weblayouttwo);
+        rootContent = findViewById(R.id.weblayouttwo);
         appBarLayout = findViewById(R.id.appbar);
         relativeLayout = findViewById(R.id.wtrmrkwebtwo);
         cardView = findViewById(R.id.web_two_txtbelow);
@@ -93,26 +93,12 @@ InterstitialAd mInterstitialAd;
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
-        MobileAds.initialize(this,
-                "ca-app-pub-6711729529292720~6492881965");
-//TODO adid
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(
-                "ca-app-pub-6711729529292720/6379742458");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Your code to show add
-                mInterstitialAd.show();
-            }
-        }, 45000);
-        progressBarb = (ProgressBar)findViewById(R.id.progr);
+        progressBarb = (ProgressBar) findViewById(R.id.progr);
         LoadWeb();
 
 
-
     }
+
     @Override
     protected void onPause() {
         wv.onPause();
@@ -124,6 +110,7 @@ InterstitialAd mInterstitialAd;
         wv.onResume();
         super.onResume();
     }
+
     private boolean isConnected(Context context) {
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -133,7 +120,8 @@ InterstitialAd mInterstitialAd;
             android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            if ((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting()))
+                return true;
             else return false;
         } else
             return false;
@@ -157,11 +145,11 @@ InterstitialAd mInterstitialAd;
 
             }
         });
-        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if(!isConnected(Rehnuma.this))
+                if (!isConnected(Rehnuma.this))
                     buildDialog(Rehnuma.this).show();
                 else {
                     wv.reload();
@@ -175,17 +163,21 @@ InterstitialAd mInterstitialAd;
     String sakshei = "http://epaper.ntnews.com/";
     String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36";
     String kit = "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36";
-    public void LoadWeb(){
+
+    public void LoadWeb() {
 
         wv = (WebView) findViewById(webviewtwo);
         final WebSettings settings = wv.getSettings();
         settings.setJavaScriptEnabled(true);
         wv.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-wv.loadUrl("https://therahnuma.com");
+        wv.loadUrl("https://therahnuma.com");
         wv.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         wv.getSettings().setAppCacheEnabled(true);
         wv.getSettings().getJavaScriptCanOpenWindowsAutomatically();
         //
+        wv.getSettings().getDisplayZoomControls();
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(true);
         wv.getSettings().setSupportZoom(true);
         wv.getSettings().setLoadsImagesAutomatically(true);
         wv.getSettings().supportMultipleWindows();
@@ -195,21 +187,20 @@ wv.loadUrl("https://therahnuma.com");
 
         if (Build.VERSION.SDK_INT >= 21) {
             wv.getSettings().setUserAgentString(lol);
-        }else{
+        } else {
             wv.getSettings().setUserAgentString(kit);
         }
 
         if (Build.VERSION.SDK_INT <= 18) {
             wv.getSettings().setBuiltInZoomControls(true);
             wv.getSettings().setDisplayZoomControls(true);
-        }else {
-            wv.getSettings().setBuiltInZoomControls(false);
-            wv.getSettings().setDisplayZoomControls(false);
+        } else {
+            wv.getSettings().setBuiltInZoomControls(true);
+            wv.getSettings().setDisplayZoomControls(true);
             wv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
-
 
 
         settings.setDomStorageEnabled(true);
@@ -219,13 +210,13 @@ wv.loadUrl("https://therahnuma.com");
         wv.setWebViewClient(new WebViewClient());
 
         //refreshLayout(this);
-        wv.setWebViewClient(new WebViewClient(){
+        wv.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 progressBarb.setVisibility(View.GONE);
                 setTitle(view.getTitle());
-                if(finishs){
+                if (finishs) {
                     wv.loadUrl("javascript:document.getElementsById('gtranslate_selector).value='en|ur';.doGTranslate(this);");
                     finishs = false;
                 }
@@ -240,12 +231,12 @@ wv.loadUrl("https://therahnuma.com");
                 super.onPageStarted(view, url, favicon);
 
 
-
             }
+
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 
-               // wv.loadUrl("file:///android_asset/error.html");
+                // wv.loadUrl("file:///android_asset/error.html");
                 Alert(view);
 
             }
@@ -257,21 +248,22 @@ wv.loadUrl("https://therahnuma.com");
             }
 
 
-
         });
 
 
-        wv.setWebChromeClient(new WebChromeClient(){
+        wv.setWebChromeClient(new WebChromeClient() {
 
-            public void onProgressChanged(WebView view, int newProgress){
+            public void onProgressChanged(WebView view, int newProgress) {
                 // Update the progress bar with page loading progress
                 progressBarb.setProgress(newProgress);
-                if(newProgress == 100){
+                if (newProgress == 100) {
                     // Hide the progressbar
                     progressBarb.setVisibility(View.GONE);
                 }
             }
-        }); }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -292,7 +284,7 @@ wv.loadUrl("https://therahnuma.com");
         }
     }
 
-    public void Alert(View view){
+    public void Alert(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Rehnuma.this);
         builder.setCancelable(true);
         builder.setTitle("Sorry, an error occured");
@@ -308,7 +300,7 @@ wv.loadUrl("https://therahnuma.com");
 
             }
         });
-        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 LoadWeb();
@@ -327,14 +319,13 @@ wv.loadUrl("https://therahnuma.com");
                     if (wv.canGoBack()) {
 
                         wv.goBack();
-                        snack= Snackbar.make(wv, "Press Again", Snackbar.LENGTH_SHORT);
+                        snack = Snackbar.make(wv, "Press Again", Snackbar.LENGTH_SHORT);
                         snack.show();
 
                         View sbarview = snack.getView();
                         sbarview.setBackgroundColor(getResources().getColor(R.color.colorAccentDark));
                     } else {
                         finish();
-
 
 
                     }

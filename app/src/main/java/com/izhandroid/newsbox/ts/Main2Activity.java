@@ -25,7 +25,7 @@ public class Main2Activity extends AppCompatActivity {
         paramc.putString("title", "Main2 was called");
         firebaseAnalytics.logEvent("About", paramc);
         Element versionElement = new Element();
-        versionElement.setTitle("Version 199.6.1");
+        versionElement.setTitle("Version 204.4.2");
 
         Element disclaimer = new Element();
         disclaimer.setTitle("Disclaimer");

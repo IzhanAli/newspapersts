@@ -79,7 +79,8 @@
             android:onClick="td"
             android:paddingBottom="22dp"
             android:paddingTop="22dp"
-            android:text="@string/adaabhyd"
+            android:text="@string/vsix"
+
             android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp" />
 
@@ -153,6 +154,29 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginBottom="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/but_telgh"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:onClick="th"
+            android:paddingTop="22dp"
+            android:paddingBottom="22dp"
+            android:text="@string/adaabhyd"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+
+        <View
+            android:id="@+id/viewag"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/but_telg"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorPrimaryLight" />
 
 
 

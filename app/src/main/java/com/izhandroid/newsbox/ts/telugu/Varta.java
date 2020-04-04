@@ -16,6 +16,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -49,7 +50,6 @@ import static com.izhandroid.newsbox.ts.R.id.webviewtwo;
 public class Varta extends AppCompatActivity {
     String urla;
     public WebView wv;
-InterstitialAd mInterstitialAd;
     private ProgressBar progressBarb;
     private FloatingActionButton floatingActionButton;
     private AppBarLayout appBarLayout;
@@ -58,7 +58,6 @@ InterstitialAd mInterstitialAd;
     FirebaseAnalytics firebaseAnalytics;
     private LinearLayout rootContent;
     Snackbar snack;
-
 
 
     @Override
@@ -70,16 +69,16 @@ InterstitialAd mInterstitialAd;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if(!isConnected(Varta.this))
+        if (!isConnected(Varta.this))
             buildDialog(Varta.this).show();
         else {
             Toast.makeText(getApplicationContext(), "Welcomr", Toast.LENGTH_SHORT);
 
         }
 
-        firebaseAnalytics  = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        rootContent =  findViewById(R.id.weblayouttwo);
+        rootContent = findViewById(R.id.weblayouttwo);
         appBarLayout = findViewById(R.id.appbar);
         relativeLayout = findViewById(R.id.wtrmrkwebtwo);
         cardView = findViewById(R.id.web_two_txtbelow);
@@ -94,24 +93,10 @@ InterstitialAd mInterstitialAd;
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        MobileAds.initialize(this,
-                "ca-app-pub-6711729529292720~6492881965");
-//TODO adid
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(
-                "ca-app-pub-6711729529292720/2923535561");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Your code to show add
-                mInterstitialAd.show();
-            }
-        }, 30000);
 
-        progressBarb = (ProgressBar)findViewById(R.id.progr);
+        progressBarb = findViewById(R.id.progr);
+        progressBarb.setMax(100);
         LoadWeb();
-
 
 
     }
@@ -125,7 +110,8 @@ InterstitialAd mInterstitialAd;
             android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            if ((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting()))
+                return true;
             else return false;
         } else
             return false;
@@ -149,11 +135,11 @@ InterstitialAd mInterstitialAd;
 
             }
         });
-        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if(!isConnected(Varta.this))
+                if (!isConnected(Varta.this))
                     buildDialog(Varta.this).show();
                 else {
                     wv.reload();
@@ -167,7 +153,8 @@ InterstitialAd mInterstitialAd;
 
     String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36";
     String kit = "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36";
-    public void LoadWeb(){
+
+    public void LoadWeb() {
 
         wv = (WebView) findViewById(webviewtwo);
         final WebSettings settings = wv.getSettings();
@@ -178,6 +165,9 @@ InterstitialAd mInterstitialAd;
         wv.getSettings().setAppCacheEnabled(true);
         wv.getSettings().getJavaScriptCanOpenWindowsAutomatically();
         //
+        wv.getSettings().getDisplayZoomControls();
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(true);
         wv.getSettings().setSupportZoom(true);
         wv.getSettings().setLoadsImagesAutomatically(true);
         wv.getSettings().supportMultipleWindows();
@@ -187,31 +177,30 @@ InterstitialAd mInterstitialAd;
 
         if (Build.VERSION.SDK_INT >= 21) {
             wv.getSettings().setUserAgentString(lol);
-        }else{
+        } else {
             wv.getSettings().setUserAgentString(kit);
         }
 
         if (Build.VERSION.SDK_INT <= 18) {
             wv.getSettings().setBuiltInZoomControls(true);
             wv.getSettings().setDisplayZoomControls(true);
-        }else {
-            wv.getSettings().setBuiltInZoomControls(false);
-            wv.getSettings().setDisplayZoomControls(false);
+        } else {
+            wv.getSettings().setBuiltInZoomControls(true);
+            wv.getSettings().setDisplayZoomControls(true);
             wv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
 
 
-
         settings.setDomStorageEnabled(true);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         settings.setUseWideViewPort(true);
         settings.setEnableSmoothTransition(true);
-        wv.setWebViewClient(new WebViewClient());
+
 
         //refreshLayout(this);
-        wv.setWebViewClient(new WebViewClient(){
+        wv.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -229,6 +218,7 @@ InterstitialAd mInterstitialAd;
                 super.onPageStarted(view, url, favicon);
 
             }
+
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 
@@ -244,23 +234,22 @@ InterstitialAd mInterstitialAd;
             }
 
 
-
         });
 
 
-        wv.setWebChromeClient(new WebChromeClient(){
+        wv.setWebChromeClient(new WebChromeClient() {
 
-            public void onProgressChanged(WebView view, int newProgress){
+            public void onProgressChanged(WebView view, int newProgress) {
                 // Update the progress bar with page loading progress
                 progressBarb.setProgress(newProgress);
-                if(newProgress == 100){
+                if (newProgress == 100) {
                     // Hide the progressbar
                     progressBarb.setVisibility(View.GONE);
                 }
             }
         });
-        Intent intent =this.getIntent();
-        if(intent!= null) {
+        Intent intent = this.getIntent();
+        if (intent != null) {
 
             Bundle data = getIntent().getExtras();
 
@@ -336,6 +325,7 @@ InterstitialAd mInterstitialAd;
 
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -348,7 +338,7 @@ InterstitialAd mInterstitialAd;
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.reload:
-               wv.reload();
+                wv.reload();
                 return true;
 
             default:
@@ -356,7 +346,7 @@ InterstitialAd mInterstitialAd;
         }
     }
 
-    public void Alert(View view){
+    public void Alert(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Varta.this);
         builder.setCancelable(true);
         builder.setTitle("Sorry, an error occured");
@@ -372,7 +362,7 @@ InterstitialAd mInterstitialAd;
 
             }
         });
-        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 LoadWeb();
@@ -393,6 +383,7 @@ InterstitialAd mInterstitialAd;
         wv.onResume();
         super.onResume();
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -401,14 +392,13 @@ InterstitialAd mInterstitialAd;
                     if (wv.canGoBack()) {
 
                         wv.goBack();
-                        snack=Snackbar.make(wv, "Press Again", Snackbar.LENGTH_SHORT);
+                        snack = Snackbar.make(wv, "Press Again", Snackbar.LENGTH_SHORT);
                         snack.show();
 
                         View sbarview = snack.getView();
                         sbarview.setBackgroundColor(getResources().getColor(R.color.colorAccentDark));
                     } else {
                         finish();
-
 
 
                     }

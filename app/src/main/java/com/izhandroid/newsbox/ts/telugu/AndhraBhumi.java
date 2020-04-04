@@ -10,16 +10,17 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import android.os.Handler;
 import android.util.Log;
@@ -64,8 +65,7 @@ public class AndhraBhumi extends AppCompatActivity {
     private LinearLayout rootContent;
 
     private ProgressBar progressBarD;
-InterstitialAd mInterstitialAd;
-  private  Snackbar snacki;
+    private Snackbar snacki;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,37 +82,25 @@ InterstitialAd mInterstitialAd;
             Toast.makeText(getApplicationContext(), "Welcomr", Toast.LENGTH_SHORT);
 
         }
-        firebaseAnalytics  = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        rootContent =  findViewById(R.id.weblayouttwo);
+        rootContent = findViewById(R.id.weblayouttwo);
         appBarLayout = findViewById(R.id.appbar);
         relativeLayout = findViewById(R.id.wtrmrkwebtwo);
         cardView = findViewById(R.id.web_two_txtbelow);
-
+        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-         floatingActionButton = findViewById(R.id.fabtwo);
+        floatingActionButton = findViewById(R.id.fabtwo);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShareUtils.chkntake(AndhraBhumi.this, appBarLayout, rootContent, relativeLayout, cardView, floatingActionButton, "newsarticle-ab", firebaseAnalytics);
             }
         });
-        MobileAds.initialize(this,
-                "ca-app-pub-6711729529292720~6492881965");
-//TODO adid
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(
-                "ca-app-pub-6711729529292720/7863380360");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Your code to show add
-                mInterstitialAd.show();
-            }
-        }, 45000);
-        progressBarD = (ProgressBar) findViewById(R.id.progr);
 
+        progressBarD = findViewById(R.id.progr);
+
+        progressBarD.setMax(100);
 
         LoadWeb();
 
@@ -199,7 +187,9 @@ InterstitialAd mInterstitialAd;
         } else {
             wv.getSettings().setUserAgentString(kit);
         }
-
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON);
+        }
         if (Build.VERSION.SDK_INT <= 18) {
             wv.getSettings().setBuiltInZoomControls(true);
             wv.getSettings().setDisplayZoomControls(true);
@@ -214,9 +204,19 @@ InterstitialAd mInterstitialAd;
 
         settings.setDomStorageEnabled(true);
         //settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-       // settings.setUseWideViewPort(true);
+        // settings.setUseWideViewPort(true);
 
-        wv.setWebViewClient(new WebViewClient());
+        wv.setWebChromeClient(new WebChromeClient() {
+
+            public void onProgressChanged(WebView view, int newProgress) {
+                // Update the progress bar with page loading progress
+                progressBarD.setProgress(newProgress);
+                if (newProgress == 100) {
+                    // Hide the progressbar
+                    progressBarD.setVisibility(View.GONE);
+                }
+            }
+        });
 
         //refreshLayout(this);
         wv.setWebViewClient(new WebViewClient() {
@@ -248,9 +248,9 @@ InterstitialAd mInterstitialAd;
 
                 if (settings.getBoolean("my_first_time", true)) {
                     //the app is being launched for first time, do something
-                   Toast t = Toast.makeText(AndhraBhumi.this,"Tap on the article to read", Toast.LENGTH_LONG);
-t.setGravity(Gravity.CENTER,0,0);
-t.show();
+                    Toast t = Toast.makeText(AndhraBhumi.this, "Tap on the article to read", Toast.LENGTH_LONG);
+                    t.setGravity(Gravity.CENTER, 0, 0);
+                    t.show();
                     // first time task
 
 
@@ -284,67 +284,49 @@ t.show();
         });
 
 
-        wv.setWebChromeClient(new WebChromeClient() {
+        Intent intent = this.getIntent();
 
-            public void onProgressChanged(WebView view, int newProgress) {
-                // Update the progress bar with page loading progress
-                progressBarD.setProgress(newProgress);
-                final Snackbar snackbar = Snackbar.make(wv, "TIP: DOUBLE TAP OR PINCH TO ZOOM", Snackbar.LENGTH_INDEFINITE);
-                snackbar.setAction("Dismiss", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackbar.dismiss();
-                    }
-                });
-                if (newProgress == 90) {
-                    // Hide the progressbar
-snackbar.show();
-                }
+        if (intent != null) {
+
+            Bundle data = getIntent().getExtras();
+
+
+            if (data != null && data.containsKey("dc")) {
+                urla = data.getString("dc");
+                wv.loadUrl(urla);
+                Bundle params = new Bundle();
+                params.putString("msg", "Deccn Chncl loaded from ABact");
+                params.putString("title", "dc was called");
+                firebaseAnalytics.logEvent("DcEn", params);
             }
-        });
-            Intent intent = this.getIntent();
-
-            if (intent != null) {
-
-                Bundle data = getIntent().getExtras();
-
-
-                if (data != null && data.containsKey("dc")) {
-                    urla = data.getString("dc");
-                    wv.loadUrl(urla);
-                    Bundle params = new Bundle();
-                    params.putString("msg", "Deccn Chncl loaded from ABact");
-                    params.putString("title", "dc was called");
-                    firebaseAnalytics.logEvent("DcEn", params);
-                }
-                if (data != null && data.containsKey("abts")) {
-                    urla = data.getString("abts");
-                    wv.loadUrl(urla);
-                    Bundle params = new Bundle();
-                    params.putString("msg", "AndhraBhumi TS loaded from ABact");
-                    params.putString("title", "abts was called");
-                    firebaseAnalytics.logEvent("ABTS", params);
-                }
-                if (data != null && data.containsKey("abap")) {
-                    urla = data.getString("abap");
-                    wv.loadUrl(urla);
-                    Bundle params = new Bundle();
-                    params.putString("msg", "AndhraBhumi AP loaded from ABact");
-                    params.putString("title", "abap was called");
-                    firebaseAnalytics.logEvent("ABAP", params);
-                }
-                if (data != null && data.containsKey("toi")) {
-                    urla = data.getString("toi");
-                    wv.loadUrl(urla);
-                    Bundle params = new Bundle();
-                    params.putString("msg", "TOI from ABAct");
-                    params.putString("title", "toi was called");
-                    firebaseAnalytics.logEvent("TOI", params);
-                }
-
+            if (data != null && data.containsKey("abts")) {
+                urla = data.getString("abts");
+                wv.loadUrl(urla);
+                Bundle params = new Bundle();
+                params.putString("msg", "AndhraBhumi TS loaded from ABact");
+                params.putString("title", "abts was called");
+                firebaseAnalytics.logEvent("ABTS", params);
+            }
+            if (data != null && data.containsKey("abap")) {
+                urla = data.getString("abap");
+                wv.loadUrl(urla);
+                Bundle params = new Bundle();
+                params.putString("msg", "AndhraBhumi AP loaded from ABact");
+                params.putString("title", "abap was called");
+                firebaseAnalytics.logEvent("ABAP", params);
+            }
+            if (data != null && data.containsKey("toi")) {
+                urla = data.getString("toi");
+                wv.loadUrl(urla);
+                Bundle params = new Bundle();
+                params.putString("msg", "TOI from ABAct");
+                params.putString("title", "toi was called");
+                firebaseAnalytics.logEvent("TOI", params);
             }
 
-            //if (urla=)
+        }
+
+        //if (urla=)
     }
 
 
@@ -375,7 +357,7 @@ snackbar.show();
 
 
                     this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);*/
-                if(item.isChecked()){
+                if (item.isChecked()) {
                     item.setChecked(false);
                     this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -386,6 +368,28 @@ snackbar.show();
                     item.setChecked(true);
                 }
                 return true;
+            case R.id.darkmode:
+
+                if (item.isChecked()) {
+
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        item.setChecked(false);
+                        WebSettingsCompat.setForceDark(wv.getSettings(), WebSettingsCompat.FORCE_DARK_OFF);
+                    } else {
+                        item.setChecked(false);
+                        item.setEnabled(false);
+                        Toast.makeText(this, "Dark Pages are not supported to your device", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        WebSettingsCompat.setForceDark(wv.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
+                        item.setChecked(true);
+                    } else {
+                        item.setChecked(false);
+                        item.setEnabled(false);
+                        Toast.makeText(this, "Dark Pages are not supported to your device", Toast.LENGTH_SHORT).show();
+                    }
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -416,6 +420,7 @@ snackbar.show();
 
 
     }
+
     @Override
     protected void onPause() {
         wv.onPause();

@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="Arab News"
+            android:text="the hindu"
             android:textColor="@color/colorPrimaryDark"
             android:onClick="an"
             android:textSize="24sp"
@@ -73,6 +73,28 @@
             android:layout_marginRight="12dp"
             android:layout_marginBottom="8dp"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/but_telcd"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:onClick="td"
+            android:paddingTop="22dp"
+            android:paddingBottom="22dp"
+            android:text="ARAB NEWS"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+
+        <View
+            android:id="@+id/viewad"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/but_telg"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorPrimaryLight" />
 
 
         <com.google.android.material.button.MaterialButton

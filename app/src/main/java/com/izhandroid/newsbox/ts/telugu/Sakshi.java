@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -20,23 +21,30 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -58,7 +66,6 @@ import com.izhandroid.newsbox.ts.english.Constanted;
 import com.izhandroid.newsbox.ts.english.TOI;
 
 
-
 import java.io.File;
 import java.util.Calendar;
 import java.util.List;
@@ -70,15 +77,16 @@ import static com.izhandroid.newsbox.ts.R.id.webviewone;
  * Created by Izhan Ali on 8/7/2018.
  */
 
-public class Sakshi extends AppCompatActivity{
-    /** SAKSHI **/
+public class Sakshi extends AppCompatActivity {
+    /**
+     * SAKSHI
+     **/
 
     //public WebView wv;
-            public WebView wv;
-    //SwipeRefreshLayout swipe;
+    public WebView wv;
     private ProgressBar progressBar;
-private TextView textView;
-    private Button  customPageScreenshot;
+    Snackbar snack;
+    FirebaseAnalytics firebaseAnalytics;
     private LinearLayout rootContent;
     private ImageView imageView;
     private FloatingActionButton floatingActionButton;
@@ -86,112 +94,101 @@ private TextView textView;
     private RelativeLayout relativeLayout;
     private MaterialCardView cardView;
     private TextView hiddenText;
-Snackbar snack;
-InterstitialAd mInterstitialAd;
-FirebaseAnalytics firebaseAnalytics;
+    String sakshiu = "http://epaper.sakshi.com/";
+    String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36";
+    private TextView textView;
+
+
+    /*  Share Screenshot  */
+    private Button customPageScreenshot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.web_one);
-       Toolbar mTopToolbar = (Toolbar) findViewById(R.id.toolbars);
+        Toolbar mTopToolbar = findViewById(R.id.toolbars);
         setSupportActionBar(mTopToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if(!isConnected(Sakshi.this)) buildDialog(Sakshi.this).show();
+        if (!isConnected(Sakshi.this)) buildDialog(Sakshi.this).show();
         else {
             Toast.makeText(getApplicationContext(), "Welcomr", Toast.LENGTH_SHORT);
 
         }
 
-        firebaseAnalytics  = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        rootContent =  findViewById(R.id.weblayoutone);
+        rootContent = findViewById(R.id.weblayoutone);
         appBarLayout = findViewById(appbars);
         relativeLayout = findViewById(R.id.wtrmrkwebone);
         cardView = findViewById(R.id.web_one_txtbelow);
+        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         floatingActionButton = findViewById(R.id.fabone);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
 
-                //TODO Test code
 
                 takeSS();
             }
         });
-        MobileAds.initialize(this,
-                "ca-app-pub-6711729529292720~6492881965");
-//TODO adid
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-6711729529292720/3126059005");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Your code to show add
-                mInterstitialAd.show();
-            }
-        }, 45000);
-        progressBar = (ProgressBar)findViewById(R.id.prg);
-textView=(TextView)findViewById(R.id.sakwel);
 
+
+        progressBar = (ProgressBar) findViewById(R.id.prg);
+        textView = (TextView) findViewById(R.id.sakwel);
+        textView.setVisibility(View.INVISIBLE);
         LoadWeb();
 
 
-
     }
-
-
-    /*  Share Screenshot  */
 
     private void takeSS() {
         Bitmap b = null;
 
         if ((ContextCompat.checkSelfPermission(Sakshi.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)&&ContextCompat.checkSelfPermission(Sakshi.this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+                != PackageManager.PERMISSION_GRANTED) && ContextCompat.checkSelfPermission(Sakshi.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
 
-                            //
+            //
 
 
-                TedPermission.with(this)
-                        .setPermissionListener(new PermissionListener() {
-                            @Override
-                            public void onPermissionGranted() {
+            TedPermission.with(this)
+                    .setPermissionListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted() {
 
 
-                            }
+                        }
 
-                            @Override
-                            public void onPermissionDenied(List<String> deniedPermissions) {
-
-
-                            }
-                        })
-                        .setRationaleMessage("We need to storage permission for Saving/Sharing News")
-                        .setRationaleConfirmText("OK")
-                        .setDeniedMessage("If you deny permission, you can not use this feature\n\nPlease turn on permissions from 'App Settings'")
-                        .setDeniedCloseButtonText("Dismiss")
-                        .setDeniedTitle("Storage Permission Denied!")
-                        .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        @Override
+                        public void onPermissionDenied(List<String> deniedPermissions) {
 
 
-                        .check();
+                        }
+                    })
+                    .setRationaleMessage("We need to storage permission for Saving/Sharing News")
+                    .setRationaleConfirmText("OK")
+                    .setDeniedMessage("If you deny permission, you can not use this feature\n\nPlease turn on permissions from 'App Settings'")
+                    .setDeniedCloseButtonText("Dismiss")
+                    .setDeniedTitle("Storage Permission Denied!")
+                    .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
 
 
-        }else{
+                    .check();
+
+
+        } else {
 
 // fullPageScreenshot.setVisibility(View.INVISIBLE);//set the visibility to INVISIBLE of first button
             // hiddenText.setVisibility(View.VISIBLE);//set the visibility to VISIBLE of hidden text
-appBarLayout.setVisibility(View.INVISIBLE);
-floatingActionButton.setVisibility(View.INVISIBLE);
-cardView.setVisibility(View.VISIBLE);
-relativeLayout.setVisibility(View.VISIBLE);
+            appBarLayout.setVisibility(View.INVISIBLE);
+            floatingActionButton.setVisibility(View.INVISIBLE);
+            cardView.setVisibility(View.VISIBLE);
+            relativeLayout.setVisibility(View.VISIBLE);
             b = ShareUtils.getScreenShot(rootContent);
             appBarLayout.setVisibility(View.VISIBLE);
             floatingActionButton.setVisibility(View.VISIBLE);
@@ -223,11 +220,7 @@ relativeLayout.setVisibility(View.VISIBLE);
         }
 
 
-
-
-
         //If Screenshot type is CUSTOM
-
 
 
     }
@@ -241,12 +234,12 @@ relativeLayout.setVisibility(View.VISIBLE);
             android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 
-            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            if ((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting()))
+                return true;
             else return false;
         } else
             return false;
     }
-
 
     public AlertDialog.Builder buildDialog(Context c) {
 
@@ -261,36 +254,34 @@ relativeLayout.setVisibility(View.VISIBLE);
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-finish();
+                finish();
 
             }
         });
-builder.setNegativeButton("Retry", new DialogInterface.OnClickListener(){
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        if(!isConnected(Sakshi.this))
-            buildDialog(Sakshi.this).show();
-        else {
-            wv.reload();
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!isConnected(Sakshi.this))
+                    buildDialog(Sakshi.this).show();
+                else {
+                    wv.reload();
 
-        }
-    }
-});
+                }
+            }
+        });
         return builder;
     }
-
-
-String sakshiu = "http://epaper.sakshi.com/";
-String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/43.0.2357.65 Mobile Safari/537.36";
     String kit = "Mozilla/5.0 (Linux; Android 4.4; Nexus 5 Build/_BuildID_) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36";
-    public void LoadWeb(){
+
+    public void LoadWeb() {
+
 
         Bundle params = new Bundle();
         params.putString("msg", "Sakshi loaded from HansAct");
         params.putString("title", "Sakshi was called");
         firebaseAnalytics.logEvent("Sakshi", params);
 
-        wv =  findViewById(webviewone);
+        wv = findViewById(webviewone);
 
 
         final WebSettings settings = wv.getSettings();
@@ -301,6 +292,9 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
         wv.getSettings().setAppCacheEnabled(true);
         wv.getSettings().getJavaScriptCanOpenWindowsAutomatically();
         //
+        wv.getSettings().getDisplayZoomControls();
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(true);
         wv.getSettings().setSupportZoom(true);
         wv.getSettings().setLoadsImagesAutomatically(true);
         wv.getSettings().supportMultipleWindows();
@@ -310,67 +304,42 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
 
         if (Build.VERSION.SDK_INT >= 21) {
             wv.getSettings().setUserAgentString(lol);
-        }else{
+        } else {
             wv.getSettings().setUserAgentString(kit);
         }
 
         if (Build.VERSION.SDK_INT <= 18) {
             wv.getSettings().setBuiltInZoomControls(true);
-             wv.getSettings().setDisplayZoomControls(true);
-        }else {
-            wv.getSettings().setBuiltInZoomControls(false);
-            wv.getSettings().setDisplayZoomControls(false);
+            wv.getSettings().setDisplayZoomControls(true);
+        } else {
+            wv.getSettings().setBuiltInZoomControls(true);
+            wv.getSettings().setDisplayZoomControls(true);
             wv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
 
-
-
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON);
+        }
         settings.setDomStorageEnabled(true);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         settings.setUseWideViewPort(true);
-        settings.setEnableSmoothTransition(true);
-        wv.setWebViewClient(new WebViewClient());
-
-        /*wv.setOnScrollChangeListener(new MyWebView.OnScrollChangeListener(){
-            @Override
-            public void onScrollChange(WebView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if(scrollX> oldScrollY){
-                    //Do stuff
-                    Toast.makeText(Sakshi.this, "Up", Toast.LENGTH_SHORT).show();
-                    //Do stuff
-                }
-                else if(scrollX< oldScrollY){
-                    Toast.makeText(Sakshi.this, "Down", Toast.LENGTH_SHORT).show();
-                }
-                Log.d("Scroll","We Scrolled etc...");
-            }
 
 
-        });*/
-        //refreshLayout(this);
-        wv.setWebViewClient(new WebViewClient(){
+        wv.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 // swipe.setRefreshing(false);
-                if(url.equals(sakshiu)){
+                if (url.equals(sakshiu)) {
                     textView.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     textView.setVisibility(View.INVISIBLE);
                 }
-                super.onPageFinished(view, url);
-                {
-                    super.onPageFinished(view, url);
-                    if (url.equals(sakshiu)) {
-                        textView.setVisibility(View.VISIBLE);
-                    }else {
-                        textView.setVisibility(View.INVISIBLE);
-                    }
-                }
 
-               progressBar.setVisibility(View.GONE);
+
+                progressBar.setVisibility(View.GONE);
                 setTitle(view.getTitle());
 
 
@@ -380,7 +349,7 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
-              progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 setTitle("Loading...Please wait");
 
                 super.onPageStarted(view, url, favicon);
@@ -401,16 +370,15 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
             }
 
 
-
         });
 
 
-        wv.setWebChromeClient(new WebChromeClient(){
+        wv.setWebChromeClient(new WebChromeClient() {
 
-            public void onProgressChanged(WebView view, int newProgress){
+            public void onProgressChanged(WebView view, int newProgress) {
                 // Update the progress bar with page loading progress
                 progressBar.setProgress(newProgress);
-                if(newProgress == 100){
+                if (newProgress == 100) {
                     // Hide the progressbar
                     progressBar.setVisibility(View.GONE);
                 }
@@ -421,10 +389,12 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
 
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_web, menu);
+
         return true;
     }
 
@@ -433,13 +403,13 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.reloadwv:
-               LoadWeb();
+                LoadWeb();
                 return true;
             case R.id.back:
                 wv.goBack();
                 return true;
             case R.id.cachecl:
-               wv.clearCache(true);
+                wv.clearCache(true);
                 wv.reload();
                 return true;
             case R.id.screenon:
@@ -448,10 +418,9 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
 
 
                     this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);*/
-                if(item.isChecked()){
+                if (item.isChecked()) {
                     item.setChecked(false);
                     this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
 
                 } else {
                     this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -459,12 +428,37 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
                     item.setChecked(true);
                 }
                 return true;
+            case R.id.darkmode:
+
+                if (item.isChecked()) {
+
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        item.setChecked(false);
+                        WebSettingsCompat.setForceDark(wv.getSettings(), WebSettingsCompat.FORCE_DARK_OFF);
+                    } else {
+                        item.setChecked(false);
+                        item.setEnabled(false);
+                        Toast.makeText(this, "Dark Pages are not supported to your device", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        WebSettingsCompat.setForceDark(wv.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
+                        item.setChecked(true);
+                    } else {
+                        item.setChecked(false);
+                        item.setEnabled(false);
+                        Toast.makeText(this, "Dark Pages are not supported to your device", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void Alert(View view){
+    public void Alert(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Sakshi.this);
         builder.setCancelable(true);
         builder.setTitle("Sorry, an error occured");
@@ -480,7 +474,7 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
 
             }
         });
-        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("Retry", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 LoadWeb();
@@ -489,6 +483,7 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
 
 
     }
+
     @Override
     protected void onPause() {
         wv.onPause();
@@ -500,65 +495,33 @@ String lol = "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 5 Build/LMY48B; wv) Apple
         wv.onResume();
         super.onResume();
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-                    if (wv.canGoBack()) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (wv.canGoBack()) {
 
-                        wv.goBack();
-                        snack=Snackbar.make(wv, "Press Again", Snackbar.LENGTH_SHORT);
-                        snack.show();
+                    wv.goBack();
+                    snack = Snackbar.make(wv, "Press Again", Snackbar.LENGTH_SHORT);
+                    snack.show();
 
-                        View sbarview = snack.getView();
-                        sbarview.setBackgroundColor(getResources().getColor(R.color.colorAccentDark));
-                    } else {
-                        finish();
-                        wv.clearCache(true);
-
-
-                    }
-
-                    return true;
+                    View sbarview = snack.getView();
+                    sbarview.setBackgroundColor(getResources().getColor(R.color.colorAccentDark));
+                } else {
+                    finish();
+                    wv.clearCache(true);
 
 
+                }
+
+                return true;
             }
         }
         return super.onKeyDown(keyCode, event);
 
-      
+
     }
-
-
-
-
-/** boolean doubleBackToExitPressedOnce = false;
-
-
- public void Exeet() {
- if (doubleBackToExitPressedOnce) {
- finish();
- }
-
- this.doubleBackToExitPressedOnce = true;
-
-
- new Handler().postDelayed(new Runnable() {
-
- @Override
- public void run() {
- doubleBackToExitPressedOnce=false;
- }
- }, 2000);
- }
-
-
-
-
- **/
-
-
 
 
 }

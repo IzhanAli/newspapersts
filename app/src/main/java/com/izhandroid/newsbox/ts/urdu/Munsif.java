@@ -38,6 +38,8 @@ import com.izhandroid.newsbox.ts.telugu.AndhraBhumi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import static com.izhandroid.newsbox.ts.R.id.webviewtwo;
 
@@ -48,7 +50,6 @@ import static com.izhandroid.newsbox.ts.R.id.webviewtwo;
 public class Munsif extends AppCompatActivity {
 
 
-InterstitialAd mInterstitialAd;
     private String urla;
     public WebView wv;
 
@@ -76,9 +77,9 @@ InterstitialAd mInterstitialAd;
             Toast.makeText(getApplicationContext(), "Welcomr", Toast.LENGTH_SHORT);
 
         }
-        firebaseAnalytics  = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        rootContent =  findViewById(R.id.weblayouttwo);
+        rootContent = findViewById(R.id.weblayouttwo);
         appBarLayout = findViewById(R.id.appbar);
         relativeLayout = findViewById(R.id.wtrmrkwebtwo);
         cardView = findViewById(R.id.web_two_txtbelow);
@@ -90,23 +91,10 @@ InterstitialAd mInterstitialAd;
                 ShareUtils.chkntake(Munsif.this, appBarLayout, rootContent, relativeLayout, cardView, floatingActionButton, "newsarticle-munsif", firebaseAnalytics);
             }
         });
-
+        this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        MobileAds.initialize(this,
-                "ca-app-pub-6711729529292720~6492881965");
-//TODO adid
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(
-                "ca-app-pub-6711729529292720/3206784202");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Your code to show add
-                mInterstitialAd.show();
-            }
-        }, 45000);
+
         progressBarD = (ProgressBar) findViewById(R.id.progr);
 
 
@@ -114,6 +102,7 @@ InterstitialAd mInterstitialAd;
 
 
     }
+
     @Override
     protected void onPause() {
         wv.onPause();
@@ -125,6 +114,7 @@ InterstitialAd mInterstitialAd;
         wv.onResume();
         super.onResume();
     }
+
     private boolean isConnected(Context context) {
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -186,7 +176,10 @@ InterstitialAd mInterstitialAd;
         wv.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         wv.getSettings().setAppCacheEnabled(true);
         wv.getSettings().getJavaScriptCanOpenWindowsAutomatically();
-           wv.loadUrl("https://munsifdaily.in/epapers");
+        wv.loadUrl("https://munsifdaily.in/epapers");
+        wv.getSettings().getDisplayZoomControls();
+        settings.setBuiltInZoomControls(true);
+        settings.setDisplayZoomControls(true);
         wv.getSettings().setSupportZoom(true);
         wv.getSettings().setLoadsImagesAutomatically(true);
         wv.getSettings().supportMultipleWindows();
@@ -199,7 +192,9 @@ InterstitialAd mInterstitialAd;
         } else {
             wv.getSettings().setUserAgentString(kit);
         }
-
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON);
+        }
         if (Build.VERSION.SDK_INT <= 18) {
             wv.getSettings().setBuiltInZoomControls(true);
             wv.getSettings().setDisplayZoomControls(true);
@@ -309,7 +304,7 @@ InterstitialAd mInterstitialAd;
 
 
                     this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);*/
-                if(item.isChecked()){
+                if (item.isChecked()) {
                     item.setChecked(false);
                     this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -320,6 +315,28 @@ InterstitialAd mInterstitialAd;
                     item.setChecked(true);
                 }
                 return true;
+            case R.id.darkmode:
+
+                if (item.isChecked()) {
+
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        item.setChecked(false);
+                        WebSettingsCompat.setForceDark(wv.getSettings(), WebSettingsCompat.FORCE_DARK_OFF);
+                    } else {
+                        item.setChecked(false);
+                        item.setEnabled(false);
+                        Toast.makeText(this, "Dark Pages are not supported to your device", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                        WebSettingsCompat.setForceDark(wv.getSettings(), WebSettingsCompat.FORCE_DARK_ON);
+                        item.setChecked(true);
+                    } else {
+                        item.setChecked(false);
+                        item.setEnabled(false);
+                        Toast.makeText(this, "Dark Pages are not supported to your device", Toast.LENGTH_SHORT).show();
+                    }
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
