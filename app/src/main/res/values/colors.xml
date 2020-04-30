@@ -17,7 +17,7 @@
 
     <color name="primaryTextColor">#ffffff</color>
 
-    <color name="secondaryTextColor">#000000</color>
+    <color name="secondaryTextColor">#ffffff</color>
 
     <integer-array name="mycolors">
         <item>@color/gplus_color_1</item>

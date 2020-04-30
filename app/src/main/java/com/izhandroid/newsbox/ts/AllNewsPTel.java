@@ -146,7 +146,8 @@ prepareData();
                             Toast.makeText(AllNewsPTel.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
                             break;
                         case "eenadu":
-                            openCustomTab(AllNewsPTel.this, Uri.parse("https://epaper.eenadu.net"));
+                            Toast.makeText(AllNewsPTel.this, "Please install EENADU App from Play Store\nInconvenience regretted!", Toast.LENGTH_SHORT).show();
+
                             break;
                         case "namasthe telangana":
                             Intent namste = new Intent(AllNewsPTel.this, NamasteTel.class);

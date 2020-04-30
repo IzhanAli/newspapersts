@@ -1,12 +1,16 @@
 package com.izhandroid.newsbox.ts.telugu;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +19,12 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.izhandroid.newsbox.ts.CustomTabsHelper;
 import com.izhandroid.newsbox.ts.R;
 
 public class MoreTel extends AppCompatActivity {
@@ -27,6 +37,9 @@ public class MoreTel extends AppCompatActivity {
     String tg="https://www.readwhere.com/newspaper/namasthe-hyderabad/Namasthe-Hyderabad/11826";
     String th = "https://epaper.v6velugu.com/";
     InterstitialAd mInterstitialAd;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    String endu;
     /* Button btn1;
     Button btn2;
     Button btn3;
@@ -42,6 +55,7 @@ public class MoreTel extends AppCompatActivity {
         btn2 =(Button) findViewById(R.id.but_telb);
         btn3 =(Button) findViewById(R.id.but_telc);*/
 
+        endu = "v";
 
         MobileAds.initialize(this, getResources().getString(R.string.pubid));
 //TODO adint5
@@ -49,7 +63,25 @@ public class MoreTel extends AppCompatActivity {
         mInterstitialAd.setAdUnitId("ca-app-pub-6711729529292720/5020050017");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
+        // Write a message to the database
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("eenaduenabled");
+// Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                endu = dataSnapshot.getValue(String.class);
 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
         AdView mAdView = findViewById(R.id.adViewfs);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -58,19 +90,24 @@ public class MoreTel extends AppCompatActivity {
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         } else if (mInterstitialAd.isLoading()) {
-            Toast.makeText(this, "Try after 4-5 secs..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please install EENADU App from Play Store\nInconvenience regretted!", Toast.LENGTH_SHORT).show();
 
         } else {
-            Intent a = new Intent(this, NamasteTel.class);
-            a.putExtra("keya", ta);
-            startActivity(a);
+            Toast.makeText(this, "Please install EENADU App from Play Store\nInconvenience regretted!", Toast.LENGTH_SHORT).show();
+
+
         }
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                Intent a = new Intent(MoreTel.this, NamasteTel.class);
-                a.putExtra("keya", ta);
-                startActivity(a);
+                if (endu.equals("no")) {
+                    Toast.makeText(MoreTel.this, "Please install EENADU App from Play Store\nInconvenience regretted!", Toast.LENGTH_SHORT).show();
+                } else if (endu.equals("yes")) {
+                    openCustomTab(MoreTel.this, Uri.parse("https://epaper.eenadu.net"));
+                } else {
+                    Toast.makeText(MoreTel.this, "Please install EENADU App from Play Store\nInconvenience regretted!", Toast.LENGTH_SHORT).show();
+
+                }
                 super.onAdClosed();
             }
 
@@ -259,5 +296,22 @@ public class MoreTel extends AppCompatActivity {
     protected void onResume() {
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
         super.onResume();
+    }
+
+    private void openCustomTab(Activity activity,
+                               Uri uri) {
+        // Here is a method that returns the chrome package name
+        String packageName = CustomTabsHelper.getPackageNameToUse(activity);
+
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent mCustomTabsIntent = builder
+                .setShowTitle(true)
+                .build();
+        builder.setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary));
+
+        if (packageName != null) {
+            mCustomTabsIntent.intent.setPackage(packageName);
+        }
+        mCustomTabsIntent.launchUrl(activity, uri);
     }
 }

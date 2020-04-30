@@ -51,7 +51,7 @@ public class FragTel extends Fragment {
     Resources res;
     boolean clickedonce = false;
 
-    String[] titles = {"SAKSHI", "EENADU", "NAMASTE TG", "ANDHRAJYOTI", "ANDHRABHOOMI", "VARTHA", "MANA TG", "NAVA TG",};
+    String[] titles = {"SAKSHI", "ANDHRAPRABHA", "NAMASTE TG", "ANDHRAJYOTI", "ANDHRABHOOMI", "VARTHA", "MANA TG", "NAVA TG",};
 
     String[] descriptions = {
             "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ",
@@ -59,7 +59,7 @@ public class FragTel extends Fragment {
 
     int[] Pics = {
             R.drawable.tel_sakshi,
-            R.drawable.eenadu,
+            R.drawable.anp,
             R.drawable.tel_namastetel,
             R.drawable.tel_ajyoti,
             R.drawable.tel_andhrabhoomi,
@@ -78,7 +78,7 @@ public class FragTel extends Fragment {
     String navt = "http://epaper.navatelangana.com";
 
     String ta = "https://www.sakshi.com";
-    String tb = "http://www.eenadu.net";
+    String tb = "http://www.prabhanews.com";
     String tc = "https://www.ntnews.com";
     String td = "http://www.andhrajyothy.com";
     String te = "http://www.andhrabhoomi.net";
@@ -141,9 +141,10 @@ public class FragTel extends Fragment {
                         Bundle params = new Bundle();
                         params.putString("msg", "EENADU hyd loaded from Fragtel");
                         params.putString("title", "eenadu was called");
-                        firebaseAnalytics.logEvent("EENADU", params);
-                        openCustomTab(getActivity(), Uri.parse("https://epaper.eenadu.net"));
-
+                        firebaseAnalytics.logEvent("Prabha", params);
+                        Intent a = new Intent(getActivity(), NamasteTel.class);
+                        a.putExtra("keya", "http://epaper.prabhanews.com");
+                        startActivity(a);
                         break;
                     case 2:
                         Intent namste = new Intent(getActivity(), NamasteTel.class);
@@ -325,9 +326,10 @@ public class FragTel extends Fragment {
                             Bundle params = new Bundle();
                             params.putString("msg", "EENADU hyd loaded from Fragtel");
                             params.putString("title", "eenadu was called");
-                            firebaseAnalytics.logEvent("EENADU", params);
-                            openCustomTab(getActivity(), Uri.parse("https://epaper.eenadu.net"));
-
+                            firebaseAnalytics.logEvent("Prabha", params);
+                            Intent a = new Intent(getActivity(), NamasteTel.class);
+                            a.putExtra("keya", "http://epaper.prabhanews.com");
+                            startActivity(a);
                             break;
                         case 2:
                             Intent namste = new Intent(getActivity(), NamasteTel.class);
@@ -426,9 +428,10 @@ public class FragTel extends Fragment {
                             Bundle params = new Bundle();
                             params.putString("msg", "EENADU hyd loaded from Fragtel");
                             params.putString("title", "eenadu was called");
-                            firebaseAnalytics.logEvent("EENADUTe", params);
-                            openCustomTab(getActivity(), Uri.parse("https://epaper.eenadu.net/"));
-
+                            firebaseAnalytics.logEvent("Prabha", params);
+                            Intent a = new Intent(getActivity(), NamasteTel.class);
+                            a.putExtra("keya", "http://epaper.prabhanews.com");
+                            startActivity(a);
                             break;
                         case 2:
                             Intent namste = new Intent(getActivity(), NamasteTel.class);

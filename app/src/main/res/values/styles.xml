@@ -18,6 +18,7 @@
     <style name="AppThemeNoActionBar" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:actionMenuTextColor">@color/primaryTextColor</item>
 
+        <item name="android:textColor">@color/primaryTextColor</item>
         <item name="actionMenuTextColor">@color/primaryTextColor</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
